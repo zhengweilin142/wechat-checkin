@@ -1,0 +1,29 @@
+<view class="page">
+
+  <view class="card" wx:if="{{list.length}}">
+    <view class="list-item" wx:for="{{list}}" wx:key="id">
+      <view class="plan-emoji" style="background: {{item.softColor}}">{{item.plan.emoji}}</view>
+      <view class="grow item-main" bindtap="onEdit" data-id="{{item.id}}">
+        <view class="item-name ellipsis">
+          {{item.plan.name}}
+          <text class="tag tag-success streak-tag" wx:if="{{item.streak > 0}}">连续 {{item.streak}} 天</text>
+        </view>
+        <view class="item-meta">{{item.metaText}}</view>
+      </view>
+      <view class="del-btn" catchtap="onDelete" data-id="{{item.id}}">删除</view>
+    </view>
+  </view>
+
+  <view class="card" wx:else>
+    <view class="empty">
+      <view class="empty-emoji">📝</view>
+      <view class="empty-title">还没有打卡项</view>
+      <view class="small">点下面的按钮创建第一个</view>
+    </view>
+  </view>
+
+  <button class="btn btn-primary btn-block add-btn" bindtap="onAdd">＋ 新建打卡项</button>
+  <view class="small muted hint">点击某一项可以修改名称、提醒时间和重复规则</view>
+
+  <view class="safe-bottom"></view>
+</view>

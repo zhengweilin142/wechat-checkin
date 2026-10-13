@@ -1,0 +1,257 @@
+.hero {
+  background: linear-gradient(135deg, #4b86ff 0%, #3b6dff 55%, #6b5cff 100%);
+  border-radius: 28rpx;
+  padding: 36rpx 32rpx 30rpx;
+  color: #fff;
+  box-shadow: 0 12rpx 32rpx rgba(59, 124, 255, 0.28);
+}
+
+.hero-head {
+  display: flex;
+  align-items: center;
+}
+
+.hero-date {
+  font-size: 26rpx;
+  opacity: 0.85;
+  margin-bottom: 8rpx;
+}
+
+.hero-greeting {
+  font-size: 38rpx;
+  font-weight: 600;
+  letter-spacing: 0.5rpx;
+}
+
+.hero-ring {
+  flex: none;
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2rpx solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: 20rpx;
+}
+
+.hero-ring-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hero-ring-unit {
+  font-size: 22rpx;
+  font-weight: 500;
+  margin-left: 2rpx;
+}
+
+.hero-ring-label {
+  font-size: 20rpx;
+  opacity: 0.8;
+  margin-top: 2rpx;
+}
+
+.hero-progress {
+  margin-top: 30rpx;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-progress .progress-inner {
+  background: #ffffff;
+}
+
+.hero-progress .progress-inner.is-full {
+  background: linear-gradient(90deg, #d9ffe4, #7bf1a8);
+}
+
+.hero-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+  font-size: 24rpx;
+  opacity: 0.92;
+}
+
+.hero-count {
+  font-weight: 600;
+  font-size: 26rpx;
+}
+
+/* ---------------- 横幅 ---------------- */
+.banner {
+  display: flex;
+  align-items: center;
+  background: #fff8e8;
+  border: 1rpx solid #ffe6b3;
+  border-radius: 20rpx;
+  padding: 22rpx 24rpx;
+  margin-top: 24rpx;
+}
+
+.banner-icon {
+  font-size: 40rpx;
+  margin-right: 18rpx;
+}
+
+.banner-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #8a5b00;
+}
+
+.banner-sub {
+  font-size: 22rpx;
+  color: #b08030;
+  margin-top: 2rpx;
+}
+
+/* ---------------- 列表 ---------------- */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 36rpx 8rpx 18rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 600;
+}
+
+.section-more {
+  font-size: 26rpx;
+  color: var(--primary);
+}
+
+.plan {
+  display: flex;
+  align-items: center;
+  background: var(--card);
+  border-radius: 24rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 4rpx 20rpx rgba(24, 36, 68, 0.05);
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.plan.is-off {
+  opacity: 0.55;
+}
+
+.plan.is-done {
+  background: #f7fbf8;
+}
+
+.plan-emoji {
+  flex: none;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44rpx;
+  margin-right: 22rpx;
+}
+
+.plan-main {
+  padding-right: 16rpx;
+}
+
+.plan-name {
+  font-size: 31rpx;
+  font-weight: 500;
+}
+
+.plan.is-done .plan-name {
+  color: #16a34a;
+}
+
+.plan-meta {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 8rpx;
+}
+
+.meta-item {
+  font-size: 22rpx;
+  color: var(--sub);
+  margin-right: 16rpx;
+}
+
+.plan-time {
+  font-size: 22rpx;
+  color: #16a34a;
+  margin-top: 6rpx;
+}
+
+.check-btn {
+  flex: none;
+  width: 116rpx;
+  height: 116rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: var(--primary);
+  background: var(--primary-soft);
+  border: 2rpx solid #d8e3ff;
+  transition: transform 0.12s ease;
+}
+
+.check-btn.is-checked {
+  background: #22c55e;
+  border-color: #22c55e;
+  color: #fff;
+  font-size: 44rpx;
+  font-weight: 600;
+}
+
+.check-btn.is-disabled {
+  background: #f2f4f8;
+  border-color: #e6e9f0;
+  color: #b9bfcc;
+}
+
+.plan:active .check-btn {
+  transform: scale(0.94);
+}
+
+/* ---------------- 空状态 ---------------- */
+.empty-card {
+  margin-top: 36rpx;
+}
+
+.empty-btn {
+  display: inline-flex;
+  margin-top: 32rpx;
+}
+
+/* ---------------- 悬浮按钮 ---------------- */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(60rpx + env(safe-area-inset-bottom));
+  width: 108rpx;
+  height: 108rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5b93ff, #3b6dff);
+  color: #fff;
+  font-size: 56rpx;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 28rpx rgba(59, 124, 255, 0.4);
+  z-index: 10;
+}
+
+.fab:active {
+  transform: scale(0.94);
+}

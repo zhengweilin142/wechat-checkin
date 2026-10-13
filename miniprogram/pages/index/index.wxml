@@ -1,0 +1,86 @@
+<view class="page">
+
+  <!-- 顶部概览 -->
+  <view class="hero">
+    <view class="hero-head">
+      <view class="grow">
+        <view class="hero-date">{{humanDate}} · {{weekday}}</view>
+        <view class="hero-greeting">{{greeting}}</view>
+      </view>
+      <view class="hero-ring">
+        <view class="hero-ring-num">{{stats.percent}}<text class="hero-ring-unit">%</text></view>
+        <view class="hero-ring-label">完成度</view>
+      </view>
+    </view>
+
+    <view class="progress hero-progress">
+      <view class="progress-inner {{allDone ? 'is-full' : ''}}" style="width: {{stats.percent}}%"></view>
+    </view>
+
+    <view class="hero-foot">
+      <text>{{tip}}</text>
+      <text class="hero-count">{{stats.done}} / {{stats.total}}</text>
+    </view>
+  </view>
+
+  <!-- 提醒未开启提示 -->
+  <view class="banner" wx:if="{{showBanner}}" bindtap="onBannerTap">
+    <text class="banner-icon">🔔</text>
+    <view class="grow">
+      <view class="banner-title">{{needResubscribe ? '提醒额度已用完，点此重新授权' : '开启微信提醒'}}</view>
+      <view class="banner-sub">{{needResubscribe ? '重新授权后才能继续收到打卡提醒' : '到点了会通过微信服务通知提醒你打卡'}}</view>
+    </view>
+    <view class="arrow"></view>
+  </view>
+
+  <!-- 打卡列表 -->
+  <view class="list-wrap" wx:if="{{list.length}}">
+    <view class="section-head">
+      <text class="section-title">今日打卡</text>
+      <text class="section-more" bindtap="goPlans">管理打卡项</text>
+    </view>
+
+    <view
+      class="plan {{item.checked ? 'is-done' : ''}} {{item.active ? '' : 'is-off'}}"
+      wx:for="{{list}}"
+      wx:key="id"
+    >
+      <view class="plan-emoji" style="background: {{item.softColor}}">{{item.plan.emoji}}</view>
+
+      <view class="plan-main grow" bindtap="goDetail" data-id="{{item.id}}">
+        <view class="plan-name ellipsis">{{item.plan.name}}</view>
+        <view class="plan-meta">
+          <text class="meta-item" wx:if="{{item.plan.remindTime && item.plan.remindEnabled}}">⏰ {{item.plan.remindTime}}</text>
+          <text class="meta-item">{{item.repeatText}}</text>
+          <text class="meta-item" wx:if="{{item.streak > 0}}">🔥 连续 {{item.streak}} 天</text>
+          <text class="meta-item" wx:if="{{!item.active}}">今天不打卡</text>
+        </view>
+        <view class="plan-time" wx:if="{{item.checked}}">已于 {{item.checkedTime}} 打卡</view>
+      </view>
+
+      <view
+        class="check-btn {{item.checked ? 'is-checked' : ''}} {{item.active ? '' : 'is-disabled'}}"
+        catchtap="onToggle"
+        data-index="{{index}}"
+      >
+        <text wx:if="{{item.checked}}">✓</text>
+        <text wx:else>打卡</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="card empty-card" wx:else>
+    <view class="empty">
+      <view class="empty-emoji">📝</view>
+      <view class="empty-title">还没有打卡项</view>
+      <view class="small">添加一个每天想坚持的小事，比如早起、喝水、读书</view>
+      <button class="btn btn-primary btn-sm empty-btn" bindtap="goAdd">立即添加</button>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>
+
+<!-- 悬浮新增按钮 -->
+<view class="fab" bindtap="goAdd">＋</view>

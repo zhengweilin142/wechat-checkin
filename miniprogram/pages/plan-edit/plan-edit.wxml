@@ -1,0 +1,136 @@
+<view class="page">
+
+  <!-- 预览 -->
+  <view class="preview card">
+    <view class="preview-emoji" style="background: {{softColor}}">{{emoji}}</view>
+    <view class="grow">
+      <view class="preview-name">{{name || '新的打卡项'}}</view>
+      <view class="preview-meta">
+        {{remindEnabled ? remindTime + ' 提醒' : '不提醒'}} ·
+        <text wx:if="{{repeatType === 'daily'}}">每天</text>
+        <text wx:elif="{{repeatType === 'weekdays'}}">工作日</text>
+        <text wx:elif="{{repeatType === 'weekend'}}">周末</text>
+        <text wx:else>自定义</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 名称 -->
+  <view class="card">
+    <view class="form-label">打卡项名称</view>
+    <input
+      class="input"
+      value="{{name}}"
+      placeholder="比如：早起、喝水 8 杯、读书 20 页"
+      placeholder-class="ph"
+      maxlength="20"
+      bindinput="onNameInput"
+    />
+    <view class="form-label mt">备注（可选）</view>
+    <input
+      class="input"
+      value="{{note}}"
+      placeholder="给自己一句提醒"
+      placeholder-class="ph"
+      maxlength="30"
+      bindinput="onNoteInput"
+    />
+  </view>
+
+  <!-- 图标 -->
+  <view class="card">
+    <view class="card-title">选个图标</view>
+    <view class="emoji-grid">
+      <view
+        class="emoji-cell {{emoji === item ? 'is-active' : ''}}"
+        wx:for="{{emojis}}"
+        wx:key="*this"
+        data-emoji="{{item}}"
+        bindtap="onPickEmoji"
+      >{{item}}</view>
+    </view>
+
+    <view class="card-title mt">主题色</view>
+    <view class="color-row">
+      <view
+        class="color-cell {{color === item.value ? 'is-active' : ''}}"
+        wx:for="{{colors}}"
+        wx:key="value"
+        data-color="{{item.value}}"
+        bindtap="onPickColor"
+      >
+        <view class="color-dot" style="background: {{item.value}}"></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提醒 -->
+  <view class="card">
+    <view class="row-between">
+      <view>
+        <view class="form-label no-mb">微信提醒</view>
+        <view class="small muted">到点通过服务通知推送（需开启订阅）</view>
+      </view>
+      <switch checked="{{remindEnabled}}" color="#3b7cff" bindchange="onRemindToggle" />
+    </view>
+
+    <view wx:if="{{remindEnabled}}">
+      <view class="divider"></view>
+      <view class="row-between">
+        <text class="form-label no-mb">提醒时间</text>
+        <picker mode="time" value="{{remindTime}}" bindchange="onTimeChange">
+          <view class="time-value">{{remindTime}}</view>
+        </picker>
+      </view>
+      <view class="preset-row">
+        <view
+          class="preset {{remindTime === item.value ? 'is-active' : ''}}"
+          wx:for="{{timePresets}}"
+          wx:key="value"
+          data-time="{{item.value}}"
+          bindtap="onPickPreset"
+        >{{item.label}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 重复 -->
+  <view class="card">
+    <view class="card-title">重复</view>
+    <view class="seg">
+      <view
+        class="seg-item {{repeatType === item.type ? 'is-active' : ''}}"
+        wx:for="{{repeatOptions}}"
+        wx:key="type"
+        data-type="{{item.type}}"
+        bindtap="onRepeatChange"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="week-row" wx:if="{{repeatType === 'custom'}}">
+      <view
+        class="week-cell {{item.active ? 'is-active' : ''}}"
+        wx:for="{{weekCells}}"
+        wx:key="day"
+        data-day="{{item.day}}"
+        bindtap="onToggleDay"
+      >{{item.label}}</view>
+    </view>
+  </view>
+
+  <!-- 提醒能力提示 -->
+  <view class="notice" wx:if="{{remindEnabled && (!cloudenvReady || !templateReady)}}">
+    <text class="notice-icon">⚠️</text>
+    <view class="grow small">
+      <block wx:if="{{!templateReady}}">还没在 miniprogram/config.js 里填写订阅消息模板 ID，暂时收不到微信提醒。</block>
+      <block wx:else>云开发未就绪，提醒不会被推送。请检查 config.js 里的云开发环境 ID，并部署 cloudfunctions。</block>
+    </view>
+  </view>
+
+  <button class="btn btn-primary btn-block save-btn" bindtap="onSave" disabled="{{saving}}">
+    {{isEdit ? '保存修改' : '创建打卡项'}}
+  </button>
+  <button class="btn btn-danger btn-block del-full" wx:if="{{isEdit}}" bindtap="onDelete">删除这个打卡项</button>
+
+  <view class="safe-bottom"></view>
+</view>

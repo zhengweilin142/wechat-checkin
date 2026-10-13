@@ -1,0 +1,261 @@
+/* ---------- 概览 ---------- */
+.overview {
+  display: flex;
+  padding: 32rpx 12rpx;
+}
+
+.ov-item {
+  flex: 1;
+  text-align: center;
+  position: relative;
+}
+
+.ov-item + .ov-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12rpx;
+  bottom: 12rpx;
+  width: 1rpx;
+  background: var(--line);
+}
+
+.ov-num {
+  font-size: 42rpx;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.ov-unit {
+  font-size: 24rpx;
+  font-weight: 500;
+  color: var(--sub);
+}
+
+.ov-label {
+  font-size: 22rpx;
+  color: var(--sub);
+  margin-top: 8rpx;
+}
+
+/* ---------- 范围选择 ---------- */
+.scope-card {
+  padding: 8rpx 28rpx;
+}
+
+.scope-picker {
+  display: flex;
+  align-items: center;
+  height: 96rpx;
+}
+
+.scope-label {
+  font-size: 28rpx;
+  color: var(--sub);
+  margin-right: 24rpx;
+}
+
+.scope-value {
+  font-size: 29rpx;
+  font-weight: 500;
+}
+
+/* ---------- 柱状图 ---------- */
+.bars {
+  display: flex;
+  align-items: flex-end;
+  height: 260rpx;
+  padding-top: 10rpx;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar-track {
+  flex: 1;
+  width: 44rpx;
+  background: #f2f4f8;
+  border-radius: 22rpx;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  margin-bottom: 14rpx;
+}
+
+.bar-fill {
+  width: 100%;
+  background: #c9d9fb;
+  border-radius: 22rpx;
+  transition: height 0.4s ease;
+}
+
+.bar-fill.is-full {
+  background: linear-gradient(180deg, #4ade80, #22c55e);
+}
+
+.bar-label {
+  font-size: 22rpx;
+  color: var(--sub);
+  line-height: 1;
+}
+
+.bar-label.is-today {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ---------- 月历 ---------- */
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.cal-title {
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.cal-nav {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 50%;
+  background: #f4f6fa;
+  color: var(--text);
+  font-size: 40rpx;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-nav.is-disabled {
+  color: #ccd2de;
+  background: #f8f9fc;
+}
+
+.cal-week {
+  display: flex;
+  margin-bottom: 8rpx;
+}
+
+.cal-week-cell {
+  flex: 1;
+  text-align: center;
+  font-size: 22rpx;
+  color: var(--sub);
+}
+
+.cal-row {
+  display: flex;
+}
+
+.cal-cell {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5rpx 0;
+}
+
+.cal-dot {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25rpx;
+  font-weight: 500;
+  transition: transform 0.15s ease;
+}
+
+.cal-cell.is-out .cal-dot {
+  background: transparent !important;
+  color: #d5dae4 !important;
+}
+
+.cal-cell.is-today .cal-dot {
+  border: 3rpx solid var(--primary);
+  font-weight: 700;
+}
+
+.cal-cell:active .cal-dot {
+  transform: scale(0.9);
+}
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 20rpx;
+}
+
+.legend-dot {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 6rpx;
+  margin: 0 6rpx;
+}
+
+.cal-summary {
+  margin-top: 12rpx;
+  text-align: right;
+}
+
+/* ---------- 计划明细 ---------- */
+.plan-row {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 0;
+}
+
+.plan-row + .plan-row {
+  border-top: 1rpx solid var(--line);
+}
+
+.plan-emoji {
+  flex: none;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  margin-right: 20rpx;
+}
+
+.plan-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.plan-row-name {
+  font-size: 29rpx;
+  font-weight: 500;
+  max-width: 380rpx;
+}
+
+.plan-row-rate {
+  font-size: 27rpx;
+  font-weight: 700;
+}
+
+.progress.mini {
+  height: 12rpx;
+  border-radius: 6rpx;
+}
+
+.plan-row-meta {
+  margin-top: 10rpx;
+}

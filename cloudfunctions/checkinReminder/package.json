@@ -1,0 +1,9 @@
+{
+  "name": "checkinReminder",
+  "version": "1.0.0",
+  "description": "打卡助手 - 定时扫描并推送订阅消息提醒",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

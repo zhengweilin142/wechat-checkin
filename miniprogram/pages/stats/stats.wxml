@@ -1,0 +1,121 @@
+<view class="page">
+
+  <!-- 概览 -->
+  <view class="card overview" wx:if="{{overview}}">
+    <view class="ov-item">
+      <view class="ov-num">{{overview.today.done}}<text class="ov-unit">/{{overview.today.total}}</text></view>
+      <view class="ov-label">今日完成</view>
+    </view>
+    <view class="ov-item">
+      <view class="ov-num">{{overview.monthStats.percent}}<text class="ov-unit">%</text></view>
+      <view class="ov-label">本月完成率</view>
+    </view>
+    <view class="ov-item">
+      <view class="ov-num">{{overview.totalChecks}}</view>
+      <view class="ov-label">累计打卡</view>
+    </view>
+    <view class="ov-item">
+      <view class="ov-num">{{overview.maxCurrentStreak}}</view>
+      <view class="ov-label">最长连续(天)</view>
+    </view>
+  </view>
+
+  <block wx:if="{{hasData}}">
+
+    <!-- 范围选择 -->
+    <view class="card scope-card">
+      <picker mode="selector" range="{{planPickerLabels}}" value="{{planIndex}}" bindchange="onScopeChange">
+        <view class="scope-picker">
+          <text class="scope-label">统计范围</text>
+          <text class="scope-value">{{scopeLabel}}</text>
+          <view class="arrow"></view>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 近 7 天 -->
+    <view class="card">
+      <view class="card-title">
+        <text>近 7 天</text>
+        <text class="small muted">{{weekRangeText}}</text>
+      </view>
+      <view class="bars">
+        <view class="bar-col" wx:for="{{weekBars}}" wx:key="date">
+          <view class="bar-track">
+            <view class="bar-fill {{item.isFull ? 'is-full' : ''}}" style="height: {{item.height}}%"></view>
+          </view>
+          <view class="bar-label {{item.isToday ? 'is-today' : ''}}">{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 月历 -->
+    <view class="card">
+      <view class="cal-head">
+        <view class="cal-nav" bindtap="onPrevMonth">‹</view>
+        <view class="cal-title">{{monthTitle}}</view>
+        <view class="cal-nav {{canGoNext ? '' : 'is-disabled'}}" bindtap="onNextMonth">›</view>
+      </view>
+
+      <view class="cal-week">
+        <view class="cal-week-cell" wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this">{{item}}</view>
+      </view>
+
+      <view class="cal-row" wx:for="{{weeks}}" wx:key="key" wx:for-item="week">
+        <view
+          class="cal-cell {{cell.isToday ? 'is-today' : ''}} {{cell.inMonth ? '' : 'is-out'}}"
+          wx:for="{{week.cells}}"
+          wx:key="date"
+          wx:for-item="cell"
+          data-date="{{cell.date}}"
+          bindtap="onCellTap"
+        >
+          <view class="cal-dot" style="background: {{cell.bg}}; color: {{cell.color}}">{{cell.day}}</view>
+        </view>
+      </view>
+
+      <view class="cal-legend">
+        <text class="small muted">少</text>
+        <view class="legend-dot" style="background: #eef1f7"></view>
+        <view class="legend-dot" style="background: rgba(34,197,94,0.20)"></view>
+        <view class="legend-dot" style="background: rgba(34,197,94,0.45)"></view>
+        <view class="legend-dot" style="background: rgba(34,197,94,0.72)"></view>
+        <view class="legend-dot" style="background: #22c55e"></view>
+        <text class="small muted">多</text>
+      </view>
+
+      <view class="cal-summary small muted">{{monthSummary}}</view>
+    </view>
+
+    <!-- 各打卡项 -->
+    <view class="card">
+      <view class="card-title">打卡项明细（本月）</view>
+      <view class="plan-row" wx:for="{{planRows}}" wx:key="id">
+        <view class="plan-emoji" style="background: {{item.softColor}}">{{item.emoji}}</view>
+        <view class="grow">
+          <view class="plan-row-head">
+            <text class="plan-row-name ellipsis">{{item.name}}</text>
+            <text class="plan-row-rate" style="color: {{item.color}}">{{item.percent}}%</text>
+          </view>
+          <view class="progress mini">
+            <view class="progress-inner" style="width: {{item.percent}}%; background: {{item.color}}"></view>
+          </view>
+          <view class="plan-row-meta small muted">
+            本月 {{item.done}}/{{item.total}} · 当前连续 {{item.streak}} 天 · 历史最长 {{item.best}} 天
+          </view>
+        </view>
+      </view>
+    </view>
+
+  </block>
+
+  <view class="card" wx:else>
+    <view class="empty">
+      <view class="empty-emoji">📊</view>
+      <view class="empty-title">还没有数据</view>
+      <view class="small">先去「打卡」页添加一个打卡项吧</view>
+    </view>
+  </view>
+
+  <view class="safe-bottom"></view>
+</view>

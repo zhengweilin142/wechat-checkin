@@ -1,0 +1,92 @@
+.hero-mini {
+  display: flex;
+  background: linear-gradient(135deg, #4b86ff, #6b5cff);
+  border-radius: 26rpx;
+  padding: 34rpx 12rpx;
+  color: #fff;
+  box-shadow: 0 12rpx 30rpx rgba(59, 124, 255, 0.25);
+  margin-bottom: 24rpx;
+}
+
+.hm-item {
+  flex: 1;
+  text-align: center;
+}
+
+.hm-num {
+  font-size: 44rpx;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hm-label {
+  font-size: 22rpx;
+  opacity: 0.85;
+  margin-top: 6rpx;
+}
+
+.tip-text {
+  line-height: 1.7;
+  margin-bottom: 6rpx;
+}
+
+.item-title {
+  font-size: 30rpx;
+}
+
+.danger-text {
+  color: var(--danger);
+}
+
+.list-item-flat {
+  min-height: 96rpx;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  background: #fff8e8;
+  border: 1rpx solid #ffe6b3;
+  border-radius: 18rpx;
+  padding: 20rpx 22rpx;
+  margin-top: 20rpx;
+  color: #8a5b00;
+  line-height: 1.6;
+}
+
+.notice-icon {
+  margin-right: 12rpx;
+  font-size: 28rpx;
+}
+
+.kv {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+  font-size: 27rpx;
+}
+
+.kv-key {
+  width: 160rpx;
+  color: var(--sub);
+  flex: none;
+}
+
+.kv-val {
+  color: var(--text);
+  max-width: 460rpx;
+}
+
+.mt {
+  margin-top: 24rpx;
+}
+
+.mt-sm {
+  margin-top: 16rpx;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 40rpx;
+  line-height: 1.7;
+}

@@ -1,0 +1,154 @@
+<view class="page">
+
+  <!-- 数据概览 -->
+  <view class="hero-mini">
+    <view class="hm-item">
+      <view class="hm-num">{{planCount}}</view>
+      <view class="hm-label">打卡项</view>
+    </view>
+    <view class="hm-item">
+      <view class="hm-num">{{recordCount}}</view>
+      <view class="hm-label">打卡记录</view>
+    </view>
+    <view class="hm-item">
+      <view class="hm-num">{{remindPlanCount}}</view>
+      <view class="hm-label">开启提醒</view>
+    </view>
+  </view>
+
+  <!-- 提醒 -->
+  <view class="card">
+    <view class="card-title">
+      <text>微信提醒</text>
+      <text class="tag {{pushEnabled ? 'tag-success' : ''}}">{{pushEnabled ? '已开启' : '未开启'}}</text>
+    </view>
+
+    <view class="small muted tip-text">
+      到点后通过微信「服务通知」提醒你打卡。一次性订阅消息每授权一次只能推送一条，
+      在弹窗里勾选「总是保持以上选择」后，打开小程序会自动补充次数。
+    </view>
+
+    <view class="notice" wx:if="{{!templateReady}}">
+      <text class="notice-icon">⚠️</text>
+      <view class="grow small">未填写订阅消息模板 ID，提醒功能不可用。请配置 config.js 里的 subscribeTemplateId。</view>
+    </view>
+
+    <view class="notice" wx:elif="{{needResubscribe}}">
+      <text class="notice-icon">🔔</text>
+      <view class="grow small">订阅次数已用完，点下方按钮重新授权即可继续接收提醒。</view>
+    </view>
+
+    <button class="btn btn-primary btn-block mt" bindtap="onSubscribe">
+      {{pushEnabled ? '重新授权提醒' : '开启微信提醒'}}
+    </button>
+    <button class="btn btn-plain btn-block mt-sm" bindtap="onTestPush">发送一条测试提醒</button>
+
+    <view class="divider"></view>
+
+    <view class="row-between list-item-flat">
+      <view class="grow">
+        <view class="item-title">自动补充订阅次数</view>
+        <view class="small muted">打开小程序时静默申请一次授权</view>
+      </view>
+      <switch checked="{{autoSubscribe}}" color="#3b7cff" bindchange="onToggleAutoSubscribe" />
+    </view>
+
+    <view class="row-between list-item-flat">
+      <view class="grow">
+        <view class="item-title">打卡震动反馈</view>
+        <view class="small muted">打卡成功时轻微震动一下</view>
+      </view>
+      <switch checked="{{vibrate}}" color="#3b7cff" bindchange="onToggleVibrate" />
+    </view>
+  </view>
+
+  <!-- 云开发 -->
+  <view class="card">
+    <view class="card-title">
+      <text>云开发</text>
+      <text class="tag {{cloudReady ? 'tag-success' : 'tag-danger'}}">{{cloudReady ? '已连接' : '未连接'}}</text>
+    </view>
+
+    <view class="kv">
+      <text class="kv-key">环境 ID</text>
+      <text class="kv-val ellipsis">{{envId}}</text>
+    </view>
+    <view class="kv">
+      <text class="kv-key">上次同步</text>
+      <text class="kv-val">{{lastSyncText}}</text>
+    </view>
+    <view class="kv" wx:if="{{cloudState}}">
+      <text class="kv-key">云端打卡项</text>
+      <text class="kv-val">{{cloudPlanCount}} 个</text>
+    </view>
+    <view class="kv" wx:if="{{cloudState}}">
+      <text class="kv-key">上次推送</text>
+      <text class="kv-val">{{lastPushText}}</text>
+    </view>
+    <view class="kv" wx:if="{{openid}}" bindtap="onCopyOpenid">
+      <text class="kv-key">openid</text>
+      <text class="kv-val ellipsis">{{openid}}</text>
+    </view>
+
+    <view class="notice" wx:if="{{!cloudReady && cloudError}}">
+      <text class="notice-icon">⚠️</text>
+      <view class="grow small">{{cloudError}}</view>
+    </view>
+
+    <button class="btn btn-ghost btn-block mt" bindtap="onSyncNow" disabled="{{syncing}}">
+      {{syncing ? '同步中…' : '立即同步到云端'}}
+    </button>
+  </view>
+
+  <!-- 数据管理 -->
+  <view class="card">
+    <view class="card-title">数据管理</view>
+
+    <view class="list-item" bindtap="onExport">
+      <view class="grow">
+        <view class="item-title">导出数据</view>
+        <view class="small muted">复制成一段文本，可粘贴保存</view>
+      </view>
+      <view class="arrow"></view>
+    </view>
+
+    <view class="list-item" bindtap="onImport">
+      <view class="grow">
+        <view class="item-title">导入数据</view>
+        <view class="small muted">从剪贴板读取之前导出的内容</view>
+      </view>
+      <view class="arrow"></view>
+    </view>
+
+    <view class="list-item" bindtap="onRestoreSamples">
+      <view class="grow">
+        <view class="item-title">恢复示例打卡项</view>
+        <view class="small muted">新增早起 / 喝水 / 健身 / 读书</view>
+      </view>
+      <view class="arrow"></view>
+    </view>
+
+    <view class="list-item" bindtap="onClearAll">
+      <view class="grow">
+        <view class="item-title danger-text">清空所有数据</view>
+        <view class="small muted">删除全部打卡项与记录，不可恢复</view>
+      </view>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <!-- 关于 -->
+  <view class="card">
+    <view class="list-item" bindtap="onAbout">
+      <view class="grow">
+        <view class="item-title">关于打卡助手</view>
+        <view class="small muted">版本 v{{version}}</view>
+      </view>
+      <view class="arrow"></view>
+    </view>
+  </view>
+
+  <view class="footer muted small">数据默认只存在本机，开启云开发后同步到你的微信云环境</view>
+
+  <view class="safe-bottom"></view>
+</view>

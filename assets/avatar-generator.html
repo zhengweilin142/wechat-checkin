@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>打卡助手 · 小程序头像</title>
+<style>
+  :root{
+    --bg:#f2f4f8; --card:#fff; --text:#191c22; --sub:#8a91a0;
+    --primary:#3b7cff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:48px 24px 90px; background:var(--bg); color:var(--text);
+    font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  .wrap{max-width:720px;margin:0 auto}
+  h1{font-size:23px;margin:0 0 6px}
+  .lead{color:var(--sub);margin:0 0 30px;font-size:14px}
+  .card{background:var(--card);border-radius:16px;padding:28px;margin-bottom:20px;
+        box-shadow:0 2px 14px rgba(24,36,68,.06)}
+  .card h2{font-size:15px;margin:0 0 18px;font-weight:600}
+  .row{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-end}
+  .slot{text-align:center}
+  .slot canvas{display:block;box-shadow:0 2px 10px rgba(24,36,68,.14)}
+  .slot.round canvas{border-radius:50%}
+  .slot .cap{font-size:12px;color:var(--sub);margin-top:9px}
+  .big{text-align:center;padding:8px 0 4px}
+  .big canvas{display:block;margin:0 auto;box-shadow:0 6px 26px rgba(24,36,68,.2)}
+  .big.round canvas{border-radius:50%}
+  .btn{display:block;width:100%;border:0;border-radius:12px;padding:17px 24px;
+       font-size:16px;font-weight:600;cursor:pointer;font-family:inherit;
+       background:var(--primary);color:#fff;margin-top:26px}
+  .btn:hover{filter:brightness(1.06)}
+  .chk{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--sub);
+       margin-top:20px;cursor:pointer}
+  .note{background:#fff8e8;border:1px solid #ffe6b3;border-radius:12px;padding:15px 20px;
+        font-size:14px;color:#8a5b00;margin-top:22px;line-height:1.75}
+  ul{margin:0;padding-left:20px;color:var(--sub);font-size:14px}
+  li{margin:6px 0}
+  code{background:#f4f6fa;padding:2px 6px;border-radius:5px;font-size:13px;color:#3d4657}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>打卡助手 · 小程序头像</h1>
+  <p class="lead">方案已定：进度环 + 对勾。直接点最下面的按钮下载即可。</p>
+
+  <div class="card">
+    <h2>效果</h2>
+    <div class="big" id="bigWrap">
+      <canvas id="p512" width="512" height="512" style="width:260px;height:260px"></canvas>
+    </div>
+    <label class="chk">
+      <input type="checkbox" id="round"> 按微信的圆形裁切预览
+    </label>
+  </div>
+
+  <div class="card">
+    <h2>小尺寸下认得出来吗</h2>
+    <div class="row">
+      <div class="slot" id="w144">
+        <canvas id="p144" width="144" height="144" style="width:144px;height:144px;border-radius:10px"></canvas>
+        <div class="cap">144 × 144（微信要求的下限）</div>
+      </div>
+      <div class="slot" id="w64">
+        <canvas id="p64" width="64" height="64" style="width:64px;height:64px;border-radius:6px"></canvas>
+        <div class="cap">64 × 64（列表里的实际大小）</div>
+      </div>
+      <div class="slot" id="w40">
+        <canvas id="p40" width="40" height="40" style="width:40px;height:40px;border-radius:4px"></canvas>
+        <div class="cap">40 × 40</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>下载</h2>
+    <button class="btn" id="dl">下载 PNG（512 × 512）</button>
+    <div class="note">
+      <b>上传路径</b>：mp.weixin.qq.com → 设置 → 基本设置 → 小程序头像<br>
+      <b>要求</b>：PNG 格式 · 尺寸 ≥ 144×144 · 文件 &lt; 2MB。512×512 完全满足。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>设计说明</h2>
+    <ul>
+      <li><b>满幅渐变底</b> —— 微信会把头像裁成圆形，背景铺满整个正方形，裁出来才是干净的圆，不会露白边</li>
+      <li><b>白色对勾</b> —— 主视觉，笔画粗 + 圆头，缩到 40px 依然认得出</li>
+      <li><b>外圈进度环</b> —— 72% 亮白弧线 + 半透明轨道，暗示「连续坚持 / 打卡进度」</li>
+      <li><b>圆形安全区</b> —— 关键元素都在半径 160 以内（画布 512），裁圆绝不会切到主体</li>
+      <li><b>配色</b> —— <code>#4B86FF → #3B7CFF → #6B5CFF</code>，与小程序首页顶部卡片完全一致</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var UNIT = 512;
+
+  function draw(canvas) {
+    var S = canvas.width;
+    var u = S / UNIT;
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, S, S);
+
+    // 满幅渐变底
+    var g = ctx.createLinearGradient(0, 0, S, S);
+    g.addColorStop(0, '#4B86FF');
+    g.addColorStop(0.55, '#3B7CFF');
+    g.addColorStop(1, '#6B5CFF');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, S, S);
+
+    // 左上高光
+    var rg = ctx.createRadialGradient(S * 0.28, S * 0.22, 0, S * 0.28, S * 0.22, S * 0.75);
+    rg.addColorStop(0, 'rgba(255,255,255,0.28)');
+    rg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = rg;
+    ctx.fillRect(0, 0, S, S);
+
+    // 进度环轨道
+    ctx.beginPath();
+    ctx.arc(S / 2, S / 2, 184 * u, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.22)';
+    ctx.lineWidth = 20 * u;
+    ctx.lineCap = 'butt';
+    ctx.stroke();
+
+    // 72% 进度弧，从正上方顺时针
+    ctx.beginPath();
+    ctx.arc(S / 2, S / 2, 184 * u, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * 0.72);
+    ctx.strokeStyle = 'rgba(255,255,255,0.92)';
+    ctx.lineWidth = 20 * u;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // 对勾
+    ctx.beginPath();
+    ctx.moveTo(154 * u, 262 * u);
+    ctx.lineTo(222 * u, 330 * u);
+    ctx.lineTo(358 * u, 182 * u);
+    ctx.strokeStyle = '#FFFFFF';
+    ctx.lineWidth = 48 * u;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+  }
+
+  var IDS = ['p512', 'p144', 'p64', 'p40'];
+
+  IDS.forEach(function (id) { draw(document.getElementById(id)); });
+
+  function exportPNG(size) {
+    var c = document.createElement('canvas');
+    c.width = size;
+    c.height = size;
+    draw(c);
+    var name = 'checkin-avatar-' + size + '.png';
+
+    function save(href) {
+      var a = document.createElement('a');
+      a.href = href;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    if (c.toBlob) {
+      c.toBlob(function (blob) {
+        var url = URL.createObjectURL(blob);
+        save(url);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+      }, 'image/png');
+    } else {
+      save(c.toDataURL('image/png'));
+    }
+  }
+
+  document.getElementById('dl').addEventListener('click', function () { exportPNG(512); });
+
+  document.getElementById('round').addEventListener('change', function (e) {
+    var on = e.target.checked;
+    var big = document.getElementById('bigWrap');
+    big.classList.toggle('round', on);
+    ['w144', 'w64', 'w40'].forEach(function (id) {
+      document.getElementById(id).classList.toggle('round', on);
+    });
+  });
+})();
+</script>
+</body>
+</html>

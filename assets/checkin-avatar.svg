@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!--
+    打卡助手 · 小程序头像
+    设计说明：
+      · 背景满幅铺满 —— 微信会把头像裁成圆形，满幅渐变裁出来才是干净的圆
+      · 主体是白色对勾，笔画粗、圆头，缩到 40px 依然认得出
+      · 外圈是半透明轨道 + 72% 亮白进度弧，暗示「连续坚持」
+      · 所有关键元素都在半径 160 以内，远在圆形安全区里
+    配色取自小程序内的主视觉（与 pages/index 顶部卡片一致）
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4B86FF"/>
+      <stop offset="0.55" stop-color="#3B7CFF"/>
+      <stop offset="1" stop-color="#6B5CFF"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.28" cy="0.22" r="0.75">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 底 -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+  <rect width="512" height="512" fill="url(#glow)"/>
+
+  <!-- 进度环：轨道 -->
+  <circle cx="256" cy="256" r="184" fill="none"
+          stroke="#FFFFFF" stroke-opacity="0.22" stroke-width="20"/>
+
+  <!-- 进度环：72% 进度弧（从正上方顺时针） -->
+  <circle cx="256" cy="256" r="184" fill="none"
+          stroke="#FFFFFF" stroke-opacity="0.92" stroke-width="20"
+          stroke-linecap="round"
+          stroke-dasharray="832 324"
+          transform="rotate(-90 256 256)"/>
+
+  <!-- 主体：对勾 -->
+  <path d="M154 262 L222 330 L358 182" fill="none"
+        stroke="#FFFFFF" stroke-width="48"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
